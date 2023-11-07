@@ -4,6 +4,8 @@
     Shannon's demon aka portfolio rebalancing bonus
     It is maybe the only holy grail in the financial field
 
+    Note: rebalancing cost should be calculated in real life, but for simplicity it is omitted
+
 
 # Todos
 
