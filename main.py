@@ -15,7 +15,7 @@ def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial
 
     allocated_cash = initial_cash/num_securities
     for idx in range(0, num_securities):
-        percentage_changes = np.random.uniform(-0.03, 0.03, num_days).astype(float)
+        percentage_changes = np.random.uniform(-0.03, 0.03055, num_days).astype(float)
         df[f"pct_change_{idx}"] = percentage_changes
         df[f"ret_path_{idx}"  ] = df[f"pct_change_{idx}"].cumsum()
         df[f"cash_path_{idx}" ] = (1+df[f"pct_change_{idx}"]).cumprod()*(allocated_cash)
@@ -41,7 +41,7 @@ def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial
     with col11:
         rebalancing_frequency = st.selectbox('Rebalancing period:', list(rebalancing_options.keys()), 
                                format_func=lambda option: rebalancing_options[option], 
-                               index=list(rebalancing_options.keys()).index("3D"))
+                               index=list(rebalancing_options.keys()).index("4D"))
 
 
     # for simplicity let's do equally weighted allocation
