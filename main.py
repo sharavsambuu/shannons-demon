@@ -29,16 +29,26 @@ def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial
 
     df['raw_portfolio_cash_path'] = df[sim_cols].sum(axis=1)
 
-    col11, col12 = st.columns(2)
+    col11, _, _ = st.columns(3)
+    rebalancing_options = {
+        'W': "Weekly rebalance",
+        'M': "Monthly rebalance",
+        'Q': "Quarterly rebalance"
+    }
     with col11:
+        rebalancing_period = st.selectbox('Rebalancing period:', list(rebalancing_options.keys()), 
+                               format_func=lambda option: rebalancing_options[option], 
+                               index=list(rebalancing_options.keys()).index("M"))
+
+    col21, col22 = st.columns(2)
+    with col21:
         st.markdown("##### Portfolio with no rebalance")
         fig, ax = plt.subplots()
         ax.plot(df['raw_portfolio_cash_path'])
         fig.autofmt_xdate()
         st.pyplot(fig)
         pass
-
-    with col12:
+    with col22:
         st.markdown("##### Portfolio with periodic rebalancing")
         pass
 
