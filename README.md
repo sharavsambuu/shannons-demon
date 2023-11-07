@@ -15,6 +15,11 @@
     Make sure to use streamlit
 
 
+# Configure & Run
+
+    virtualenv -p python3.9 env && source env/bin/activate && pip install -r requirements.txt
+    streamlit run main.py
+
 
 # References
 
@@ -24,3 +29,5 @@
 
     https://matt-rickard.com/shannons-demon
 
+    https://www.youtube.com/watch?v=sR2JxfiH7gk
+    

@@ -4,3 +4,4 @@ matplotlib
 mplfinance
 streamlit
 quantstats
+jupyter
