@@ -17,7 +17,7 @@ def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial
         percentage_changes = np.random.uniform(-0.02, 0.02, num_days).astype(float)
         df[f"pct_change_{idx}"] = percentage_changes
         df[f"ret_path_{idx}"  ] = df[f"pct_change_{idx}"].cumsum()
-        df[f"cash_path_{idx}" ] = (1+df[f"pct_change_{idx}"]).cumprod()*initial_cash
+        df[f"cash_path_{idx}" ] = (1+df[f"pct_change_{idx}"]).cumprod()*(initial_cash/num_securities)
 
 
     sim_cols  = [col_name for col_name in df.columns if col_name.startswith("cash")]
@@ -26,6 +26,21 @@ def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial
         ax.plot(df[col_name])
     fig.autofmt_xdate()
     st.pyplot(fig)
+
+    df['raw_portfolio_cash_path'] = df[sim_cols].sum(axis=1)
+
+    col11, col12 = st.columns(2)
+    with col11:
+        st.markdown("##### Portfolio with no rebalance")
+        fig, ax = plt.subplots()
+        ax.plot(df['raw_portfolio_cash_path'])
+        fig.autofmt_xdate()
+        st.pyplot(fig)
+        pass
+
+    with col12:
+        st.markdown("##### Portfolio with periodic rebalancing")
+        pass
 
 
     pass
