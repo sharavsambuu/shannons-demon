@@ -6,17 +6,28 @@ import matplotlib.pyplot as plt
 from   datetime          import timedelta
 
 
-def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial_cash):
+def simulate_portfolios(start_date,  end_date, num_securities, num_days, initial_cash, outliers_percentage):
     trade_dates        = pd.to_datetime(np.sort(np.random.choice(pd.date_range(start=start_date, end=end_date, periods=num_days + 1), num_days, replace=False)))
 
     df = pd.DataFrame({'datetime'  : trade_dates})
-    df['datetime'] = pd.to_datetime(df['datetime'])
+    df['datetime' ] = pd.to_datetime(df['datetime'])
+    df['datetime_'] = df['datetime']
     df = df.set_index('datetime')
+
+    outliers_percentage = outliers_percentage/100.0 # percentage of all returns are outliers
+    outliers_count      = int(num_days*outliers_percentage)
 
     allocated_cash = initial_cash/num_securities
     for idx in range(0, num_securities):
-        percentage_changes = np.random.uniform(-0.03, 0.03055, num_days).astype(float)
+        percentage_changes = np.random.uniform(-0.05, 0.05, num_days).astype(float)
+        extreme_returns    = np.random.uniform(-0.09,  0.1, outliers_count).astype(float)
+        outliers_date      = df['datetime_'].sample(n=outliers_count).to_list()
         df[f"pct_change_{idx}"] = percentage_changes
+        for outlier in list(zip(outliers_date, extreme_returns)):
+            outlier_dt  = outlier[0]
+            outlier_ret = outlier[1]
+            df.loc[outlier_dt, f"pct_change_{idx}"] = outlier_ret
+        
         df[f"ret_path_{idx}"  ] = df[f"pct_change_{idx}"].cumsum()
         df[f"cash_path_{idx}" ] = (1+df[f"pct_change_{idx}"]).cumprod()*(allocated_cash)
 
@@ -101,7 +112,7 @@ def main():
     #st.set_page_config(layout="wide")
     st.markdown("### Demonstration of Shannon's demon")
 
-    col01, col02, col03, col04 = st.columns(4)
+    col01, col02, col03, col04, col05 = st.columns(5)
     with col01:
         start_date = st.date_input('Start Date', min_value=None, max_value=None, key=None)
     with col02:
@@ -109,11 +120,13 @@ def main():
     with col03:
         num_days = st.number_input("Days", min_value=120, max_value=1500, step=30, value=1000)
     with col04:
+        outliers_percentage = st.number_input("Outliers percentage", min_value=1, max_value=100, step=1, value=10)
+    with col05:
         initial_cash = st.number_input("Initial cash $", min_value=10000, step=100, value=10000)
 
     end_date = (start_date + timedelta(days=num_days)) if start_date else None
 
-    simulate_portfolios(start_date=start_date, end_date=end_date, num_securities=num_securities, num_days=num_days, initial_cash=initial_cash)
+    simulate_portfolios(start_date=start_date, end_date=end_date, num_securities=num_securities, num_days=num_days, initial_cash=initial_cash, outliers_percentage=outliers_percentage)
 
 if __name__ == '__main__':
     main()
