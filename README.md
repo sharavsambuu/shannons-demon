@@ -9,12 +9,12 @@
 
 # Todos
 
-    Simulate one security
-    Simulate multiple securities
-    Calculate portfolio without rebalance
-    Calculate portfolio with periodic rebalancing
-    Extract metrics from portfolios
-    Make sure to use streamlit
+    DONE Simulate one security
+    DONE Simulate multiple securities
+    DONE Calculate portfolio without rebalance
+    DONE Calculate portfolio with periodic rebalancing
+    DONE Extract metrics from portfolios
+    DONE Make sure to use streamlit
 
 
 # Configure & Run
